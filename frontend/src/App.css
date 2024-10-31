@@ -1,38 +1,86 @@
+/* App.css */
+/* Add to App.css */
+
+/* Define color palette and general styles */
+:root {
+  --bg-color: #f0f5f5; /* Light background */
+  --text-color: #2c3e3e; /* Dark teal for text */
+  --accent-color: #009688; /* Main teal accent */
+  --secondary-accent: #00796b; /* Darker teal accent */
+  --button-color: #008080; /* Teal for main button color */
+  --button-hover-color: #006666; /* Slightly darker teal for hover */
+  --button-shadow: 0px 4px 12px rgba(0, 128, 128, 0.3); /* Adjust shadow to match */
+  --border-radius: 12px;
+  --shadow: 0px 4px 12px rgba(0, 0, 0, 0.2);
+  --font-family: 'Roboto', sans-serif;
+  --font-family-alt: 'Inter', sans-serif;
+
+  /* Layered Task Colors */
+  --main-task-bg: #d9f3f3;   /* Light teal for main tasks */
+  --subtask-bg: #f8f5f2;     /* Very light beige for subtasks */
+  --subsubtask-bg: #fef8e7;  /* White for sub-subtasks */
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: var(--font-family);
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-alt);
+  color: var(--accent-color);
+}
+
 .App {
-  text-align: center;
+  padding: 2rem;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Global input and button styling */
+.MuiFormControl-root, .MuiTextField-root, .MuiSelect-root, .due-date-picker .MuiOutlinedInput-root {
+  border-radius: var(--border-radius);
+  background-color: #ffffff; /* White background for consistency */
+  color: var(--text-color);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.due-date-picker .MuiInputLabel-root {
+  color: var(--accent-color); /* Label color */
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+/* Styling for Task Cards */
+.MuiCard-root.main-task {
+  background-color: var(--main-task-bg);
 }
 
-.App-link {
-  color: #61dafb;
+.MuiCard-root.subtask {
+  background-color: var(--subtask-bg);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.MuiCard-root.subsubtask {
+  background-color: var(--subsubtask-bg);
+}
+
+button, .MuiIconButton-root {
+  color: var(--accent-color);
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+button:hover, .MuiIconButton-root:hover {
+  color: var(--button-hover);
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Dialog styling */
+.MuiDialog-paper {
+  background-color: #ffffff !important;
+  color: var(--text-color);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+}
+
+.MuiDialogActions-root button {
+  color: var(--secondary-accent);
+  font-weight: bold;
 }

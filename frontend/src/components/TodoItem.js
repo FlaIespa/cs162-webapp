@@ -3,15 +3,18 @@ import React, { useState } from 'react';
 import SubItem from './SubItem';
 import TaskStatusToggle from './TaskStatusToggle';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
+import TaskDialog from './TaskDialog';
 import { Card, CardContent, Typography, IconButton, Box, Collapse, Divider } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 
-const TodoItem = ({ task, onDelete }) => {
+const TodoItem = ({ task, onDelete, onAddSubtask, onDeleteSubtask }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [isCompleted, setIsCompleted] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [isSubtaskDialogOpen, setIsSubtaskDialogOpen] = useState(false);
 
     const toggleExpand = () => setIsExpanded(!isExpanded);
     const toggleCompletion = () => setIsCompleted(!isCompleted);
@@ -22,11 +25,31 @@ const TodoItem = ({ task, onDelete }) => {
 
     const handleConfirmDelete = () => {
         setIsDeleteDialogOpen(false);
-        onDelete(task.name); // Assuming onDelete function is passed from TodoList
+        onDelete(task.name);
+    };
+
+    const handleAddSubtaskClick = () => {
+        setIsSubtaskDialogOpen(true);
+    };
+
+    const handleSubtaskSave = (newSubtask) => {
+        onAddSubtask(task.name, newSubtask);
+        setIsSubtaskDialogOpen(false);
     };
 
     return (
-        <Card variant="outlined" sx={{ marginY: 2, backgroundColor: isCompleted ? 'rgba(230, 230, 230, 0.6)' : 'rgba(240, 240, 240, 0.8)' }}>
+        <Card 
+            variant="outlined" 
+            className="main-task" 
+            sx={{ 
+                marginY: 2,
+                padding: 2,
+                borderRadius: 'var(--border-radius)',
+                boxShadow: 'var(--shadow)',
+                color: 'var(--text-color)',
+                transition: 'background-color 0.3s ease',
+            }}
+        >
             <CardContent>
                 <Box display="flex" alignItems="center" justifyContent="space-between">
                     <TaskStatusToggle 
@@ -35,40 +58,52 @@ const TodoItem = ({ task, onDelete }) => {
                         label={task.name} 
                     />
                     <Box>
-                        <IconButton onClick={toggleExpand} size="small">
+                        <IconButton onClick={handleAddSubtaskClick} size="small" sx={{ color: 'var(--accent-color)', '&:hover': { color: 'var(--button-hover)' } }}>
+                            <AddIcon />
+                        </IconButton>
+                        <IconButton onClick={toggleExpand} size="small" sx={{ color: 'var(--accent-color)', '&:hover': { color: 'var(--button-hover)' } }}>
                             {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                         </IconButton>
-                        <IconButton onClick={handleDeleteClick} size="small" color="secondary">
+                        <IconButton onClick={handleDeleteClick} size="small" sx={{ color: 'var(--secondary-accent)', '&:hover': { color: 'var(--button-hover)' } }}>
                             <DeleteIcon />
                         </IconButton>
                     </Box>
                 </Box>
                 
-                {/* Display Due Date if it exists */}
                 {task.dueDate && (
-                    <Typography variant="body2" color="text.secondary" sx={{ marginTop: 1 }}>
+                    <Typography variant="body2" sx={{ color: 'var(--text-color)', marginTop: 1 }}>
                         Due: {new Date(task.dueDate).toLocaleDateString()}
                     </Typography>
                 )}
 
-                {/* Display Priority if it exists */}
                 {task.priority && (
-                    <Typography variant="body2" color="text.secondary" sx={{ marginTop: 1 }}>
+                    <Typography variant="body2" sx={{ color: 'var(--secondary-accent)', marginTop: 1 }}>
                         Priority: {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
                     </Typography>
                 )}
 
-                <Divider sx={{ marginY: 1 }} />
+                <Divider sx={{ backgroundColor: 'rgba(44, 62, 62, 0.3)', marginY: 1 }} />
                 <Collapse in={isExpanded} timeout="auto" unmountOnExit>
                     <Box sx={{ paddingLeft: 2 }}>
                         {task.subItems && task.subItems.map((subTask, index) => (
-                            <SubItem key={index} subTask={subTask} />
+                            <SubItem 
+                                key={index} 
+                                subTask={subTask} 
+                                level={2} 
+                                onAddSubtask={onAddSubtask} 
+                                onDeleteSubtask={(subtaskName) => onDeleteSubtask(task.name, subtaskName)} // Handle subtask deletion
+                            />
                         ))}
                     </Box>
                 </Collapse>
             </CardContent>
 
-            {/* Delete Confirmation Dialog */}
+            <TaskDialog
+                open={isSubtaskDialogOpen}
+                handleClose={() => setIsSubtaskDialogOpen(false)}
+                handleSave={handleSubtaskSave}
+            />
+
             <DeleteConfirmationDialog 
                 open={isDeleteDialogOpen} 
                 onClose={() => setIsDeleteDialogOpen(false)} 

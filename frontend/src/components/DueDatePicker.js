@@ -8,7 +8,22 @@ const DueDatePicker = ({ dueDate, setDueDate }) => (
         label="Due Date"
         value={dueDate}
         onChange={(newDate) => setDueDate(newDate)}
-        renderInput={(params) => <TextField {...params} fullWidth />}
+        renderInput={(params) => (
+            <TextField 
+                {...params} 
+                fullWidth 
+                variant="outlined"
+                sx={{
+                    '& .MuiOutlinedInput-root': {
+                        borderRadius: 'var(--border-radius)',
+                        backgroundColor: 'var(--bg-color)', // Ensure it's white to match other fields
+                    },
+                    '& .MuiInputLabel-root': {
+                        color: 'var(--accent-color)',
+                    },
+                }}
+            />
+        )}
     />
 );
 

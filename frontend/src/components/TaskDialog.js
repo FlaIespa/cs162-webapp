@@ -1,8 +1,8 @@
 // src/components/TaskDialog.js
 import React, { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } from '@mui/material';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import PrioritySelector from './PrioritySelector';
+import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, MenuItem } from '@mui/material';
+import DueDatePicker from './DueDatePicker';
+import '../App.css'; // Import global styles
 
 const TaskDialog = ({ open, handleClose, handleSave, initialData = {} }) => {
     const [taskName, setTaskName] = useState(initialData.name || '');
@@ -11,36 +11,79 @@ const TaskDialog = ({ open, handleClose, handleSave, initialData = {} }) => {
 
     const handleSubmit = () => {
         handleSave({ name: taskName, dueDate, priority });
+        setTaskName(''); // Reset fields
+        setDueDate(null);
+        setPriority('');
         handleClose();
     };
 
     return (
-        <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-            <DialogTitle>{initialData.name ? "Edit Task" : "Add Task"}</DialogTitle>
+        <Dialog 
+            open={open} 
+            onClose={handleClose} 
+            PaperProps={{
+                sx: {
+                    padding: '1.5rem',
+                    borderRadius: 'var(--border-radius)',
+                    backgroundColor: 'var(--task-bg)',
+                    color: 'var(--text-color)',
+                    boxShadow: 'var(--shadow)',
+                }
+            }}
+        >
+            <DialogTitle sx={{ fontFamily: 'var(--font-family-alt)', color: 'var(--accent-color)' }}>
+                {initialData.name ? "Edit Task" : "Add Task"}
+            </DialogTitle>
             <DialogContent>
                 <TextField
-                    autoFocus
-                    margin="dense"
                     label="Task Name"
-                    type="text"
                     fullWidth
                     variant="outlined"
                     value={taskName}
                     onChange={(e) => setTaskName(e.target.value)}
+                    sx={{
+                        marginBottom: '1rem',
+                        '& .MuiOutlinedInput-root': {
+                            borderRadius: 'var(--border-radius)',
+                            backgroundColor: 'var(--bg-color)',
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'var(--accent-color)',
+                        },
+                    }}
                 />
-                
-                <DatePicker
-                    label="Due Date"
-                    value={dueDate}
-                    onChange={(newDate) => setDueDate(newDate)}
-                    renderInput={(params) => <TextField {...params} fullWidth />}
-                />
-
-                <PrioritySelector priority={priority} setPriority={setPriority} />
+                <DueDatePicker dueDate={dueDate} setDueDate={setDueDate} />
+                <TextField
+                    select
+                    label="Priority"
+                    fullWidth
+                    variant="outlined"
+                    value={priority}
+                    onChange={(e) => setPriority(e.target.value)}
+                    sx={{
+                        marginTop: '1rem',
+                        '& .MuiOutlinedInput-root': {
+                            borderRadius: 'var(--border-radius)',
+                            backgroundColor: 'var(--bg-color)',
+                        },
+                        '& .MuiInputLabel-root': {
+                            color: 'var(--accent-color)',
+                        },
+                    }}
+                >
+                    <MenuItem value="" disabled>
+                        Priority
+                    </MenuItem>
+                    <MenuItem value="high">High</MenuItem>
+                    <MenuItem value="medium">Medium</MenuItem>
+                    <MenuItem value="low">Low</MenuItem>
+                </TextField>
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose} color="secondary">Cancel</Button>
-                <Button onClick={handleSubmit} color="primary">
+                <Button onClick={handleClose} sx={{ color: 'var(--secondary-accent)', fontWeight: 'bold' }}>
+                    Cancel
+                </Button>
+                <Button onClick={handleSubmit} sx={{ color: 'var(--accent-color)', fontWeight: 'bold' }}>
                     {initialData.name ? "Save" : "Add"}
                 </Button>
             </DialogActions>
