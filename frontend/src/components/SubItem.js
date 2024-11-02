@@ -1,4 +1,3 @@
-// src/components/SubItem.js
 import React, { useState } from 'react';
 import TaskDialog from './TaskDialog';
 import { Box, Typography, IconButton, Collapse, Card, CardContent, Checkbox } from '@mui/material';
@@ -10,27 +9,71 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const SubItem = ({ subTask, level, onAddSubtask, onDeleteSubtask, onCompleteSubtask }) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const [isSubtaskDialogOpen, setIsSubtaskDialogOpen] = useState(false);
-    const [isCompleted, setIsCompleted] = useState(false);
+    const [subItems, setSubItems] = useState(subTask.subItems || []);
+    const [isCompleted, setIsCompleted] = useState(subTask.completed || false);
 
     const toggleExpand = () => setIsExpanded(!isExpanded);
     const handleAddSubtaskClick = () => setIsSubtaskDialogOpen(true);
-    const handleDeleteClick = () => onDeleteSubtask(subTask.name);
-    const handleCompleteChange = () => {
+
+    const handleDeleteClick = () => onDeleteSubtask(subTask.id);
+
+    const handleCompleteChange = async () => {
         setIsCompleted(!isCompleted);
-        onCompleteSubtask(subTask.name, !isCompleted);
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/tasks/${subTask.id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ completed: !isCompleted }),
+            });
+            if (response.ok) {
+                onCompleteSubtask(subTask.id, !isCompleted);
+            } else {
+                console.error("Failed to update subtask completion status");
+            }
+        } catch (error) {
+            console.error("Error updating subtask completion status:", error);
+        }
     };
 
-    const handleSubtaskSave = (newSubtask) => {
-        if (!subTask.subItems) subTask.subItems = [];
-        subTask.subItems.push(newSubtask);
-        onAddSubtask(subTask.name, newSubtask); 
-        setIsSubtaskDialogOpen(false);
+    const handleSubtaskSave = async (newSubtask) => {
+        console.log("Sending subtask creation request to:", `${process.env.REACT_APP_API_URL}/tasks/${subTask.id}/subtasks`);
+        console.log("Request body:", {
+            name: newSubtask.name,
+            dueDate: newSubtask.dueDate,
+            priority: newSubtask.priority,
+            status: newSubtask.status || 'To-Do'
+        });
+        
+        try {
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${subTask.id}/subtasks`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: newSubtask.name,
+                    dueDate: newSubtask.dueDate,
+                    priority: newSubtask.priority,
+                    // parent_id: subTask.id 
+                }),
+            });
+    
+            if (response.ok) {
+                const { subTask } = await response.json();
+                setSubItems((prevSubItems) => [...prevSubItems, subTask]);  // Append new subtask without overwriting
+                onAddSubtask(subTask.id, subTask); // Update parent task with the new subtask
+                setIsSubtaskDialogOpen(false); // Close dialog after save
+            } else {
+                console.error("Failed to save subtask");
+            }
+        } catch (error) {
+            console.error("Error saving subtask:", error);
+        }
     };
+    
+    
 
-    // Set background color based on task level
-    const backgroundColor = level === 2 
-        ? 'var(--subtask-bg)'       // Second-level subtask
-        : 'var(--subsubtask-bg)';   // Third-level subtask
+    const backgroundColor = level === 3 
+        ? 'var(--subtask-bg)'
+        : 'var(--subsubtask-bg)';
 
     return (
         <Card 
@@ -49,7 +92,6 @@ const SubItem = ({ subTask, level, onAddSubtask, onDeleteSubtask, onCompleteSubt
         >
             <CardContent>
                 <Box display="flex" alignItems="center" justifyContent="space-between">
-                    {/* Completion Checkbox */}
                     <Checkbox
                         checked={isCompleted}
                         onChange={handleCompleteChange}
@@ -85,14 +127,14 @@ const SubItem = ({ subTask, level, onAddSubtask, onDeleteSubtask, onCompleteSubt
 
                 <Collapse in={isExpanded} timeout="auto" unmountOnExit>
                     <Box sx={{ paddingLeft: 2 }}>
-                        {subTask.subItems && subTask.subItems.map((nestedSubTask, index) => (
+                        {subItems.map((nestedSubTask, index) => (
                             <SubItem 
                                 key={index} 
-                                subTask={nestedSubTask} 
+                                subTask={{ ...nestedSubTask, parentTaskId: subTask.id }} 
                                 level={level + 1} 
                                 onAddSubtask={onAddSubtask} 
-                                onDeleteSubtask={onDeleteSubtask} // Pass down for nested deletion
-                                onCompleteSubtask={onCompleteSubtask} // Pass down for nested completion
+                                onDeleteSubtask={onDeleteSubtask}
+                                onCompleteSubtask={onCompleteSubtask}
                             />
                         ))}
                     </Box>

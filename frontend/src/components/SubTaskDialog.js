@@ -1,16 +1,16 @@
-// src/components/TaskDialog.js
+// src/components/SubTaskDialog.js
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, MenuItem } from '@mui/material';
 import DueDatePicker from './DueDatePicker';
 import '../App.css'; // Import global styles
 
-const TaskDialog = ({ open, handleClose, handleSave, initialData = {} }) => {
-    const [taskName, setTaskName] = useState(initialData.name || '');
+const SubTaskDialog = ({ open, handleClose, handleSave, initialData = {}, parentID }) => {
+    const [subTaskName, setSubTaskName] = useState(initialData.name || '');
     const [dueDate, setDueDate] = useState(initialData.dueDate || null);
     const [priority, setPriority] = useState(initialData.priority || '');
 
-    const handleTaskNameChange = (event) => {
-        setTaskName(event.target.value);
+    const handleSubTaskNameChange = (event) => {
+        setSubTaskName(event.target.value);
     };
 
     const handlePriorityChange = (event) => {
@@ -21,13 +21,53 @@ const TaskDialog = ({ open, handleClose, handleSave, initialData = {} }) => {
         setDueDate(newDate);
     };
 
-    const handleSubmit = () => {
-        handleSave({ name: taskName, dueDate, priority });
-        setTaskName(''); // Reset fields
-        setDueDate(null);
-        setPriority('');
-        handleClose();
+    const handleSubmit = async () => {
+        try {
+            console.log(parentID)
+            console.log("Sending subtask creation request to:", `${process.env.REACT_APP_API_URL}/tasks/${parentID}/subtasks`);
+            console.log("Request body:", {
+                name: subTaskName,
+                dueDate,
+                priority,
+                status: 'To-Do' // Default status
+            });
+    
+            // Make the API call to create a subtask
+            const response = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${parentID}/subtasks`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({
+                    name: subTaskName,
+                    dueDate,
+                    priority,
+                    status: 'To-Do'
+                })
+            });
+    
+            if (response.ok) {
+                const savedSubtask = await response.json();
+                console.log("Subtask saved successfully:", savedSubtask);
+    
+                // Reset form fields and close the dialog
+                setSubTaskName('');
+                setDueDate(null);
+                setPriority('');
+    
+                // Optional: You can pass the new subtask back to the parent to update the UI
+                handleSave(savedSubtask);
+            } else {
+                console.error("Failed to save subtask:", await response.json());
+            }
+        } catch (error) {
+            console.error("Error saving subtask:", error);
+        } finally {
+            handleClose();
+        }
     };
+    
 
     return (
         <Dialog 
@@ -44,15 +84,15 @@ const TaskDialog = ({ open, handleClose, handleSave, initialData = {} }) => {
             }}
         >
             <DialogTitle sx={{ fontFamily: 'var(--font-family-alt)', color: 'var(--accent-color)' }}>
-                {initialData.name ? "Edit Task" : "Add Task"}
+                {initialData.name ? "Edit SubTask" : "Add SubTask"}
             </DialogTitle>
             <DialogContent>
                 <TextField
-                    label="Task Name"
+                    label="SubTask Name"
                     fullWidth
                     variant="outlined"
-                    value={taskName}
-                    onChange={handleTaskNameChange}
+                    value={subTaskName}
+                    onChange={handleSubTaskNameChange}
                     sx={{
                         marginBottom: '1rem',
                         '& .MuiOutlinedInput-root': {
@@ -103,4 +143,4 @@ const TaskDialog = ({ open, handleClose, handleSave, initialData = {} }) => {
     );
 };
 
-export default TaskDialog;
+export default SubTaskDialog;

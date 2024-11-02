@@ -6,6 +6,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
+import WelcomePage from './pages/WelcomePage';
 
 function App() {
     return (
@@ -13,9 +14,10 @@ function App() {
             <Router>
                 <div className="App">
                     <Routes>
-                        <Route path="/" element={<HomePage />} />
+                        <Route path="/" element={<WelcomePage />} />
                         <Route path="/login" element={<LoginPage />} />
                         <Route path="/signup" element={<SignUpPage />} />
+                        <Route path="/home" element={<HomePage />} />
                     </Routes>
                 </div>
             </Router>

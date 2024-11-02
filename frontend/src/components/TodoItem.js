@@ -9,32 +9,39 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import SubTaskDialog from './SubTaskDialog';
 
-const TodoItem = ({ task, onDelete, onAddSubtask, onDeleteSubtask }) => {
+const TodoItem = ({ task, onDelete, onDeleteSubtask, onCompleteTask }) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const [isCompleted, setIsCompleted] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [isSubtaskDialogOpen, setIsSubtaskDialogOpen] = useState(false);
 
+    // Toggle the expanded state of the task
     const toggleExpand = () => setIsExpanded(!isExpanded);
-    const toggleCompletion = () => setIsCompleted(!isCompleted);
 
+    // Handle task deletion
     const handleDeleteClick = () => {
         setIsDeleteDialogOpen(true);
     };
 
     const handleConfirmDelete = () => {
         setIsDeleteDialogOpen(false);
-        onDelete(task.name);
+        onDelete(task.id);  // Calls the onDelete function passed down from TodoList
     };
 
+    // Handle adding a new subtask
     const handleAddSubtaskClick = () => {
         setIsSubtaskDialogOpen(true);
     };
 
-    const handleSubtaskSave = (newSubtask) => {
-        onAddSubtask(task.name, newSubtask);
-        setIsSubtaskDialogOpen(false);
+    // const handleSubtaskSave = (newSubtask) => {
+    //     onAddSubtask(task.id, newSubtask);  // Adds the new subtask to this task’s subItems
+    //     setIsSubtaskDialogOpen(false);
+    // };
+
+    // Handle task completion
+    const handleCompletionToggle = () => {
+        onCompleteTask(task.name, !task.completed); // Calls the onCompleteTask function with updated completion status
     };
 
     return (
@@ -53,8 +60,8 @@ const TodoItem = ({ task, onDelete, onAddSubtask, onDeleteSubtask }) => {
             <CardContent>
                 <Box display="flex" alignItems="center" justifyContent="space-between">
                     <TaskStatusToggle 
-                        isChecked={isCompleted} 
-                        onChange={toggleCompletion} 
+                        isChecked={task.completed} 
+                        onChange={handleCompletionToggle} 
                         label={task.name} 
                     />
                     <Box>
@@ -88,20 +95,21 @@ const TodoItem = ({ task, onDelete, onAddSubtask, onDeleteSubtask }) => {
                         {task.subItems && task.subItems.map((subTask, index) => (
                             <SubItem 
                                 key={index} 
-                                subTask={subTask} 
+                                subTask={subTask}
                                 level={2} 
-                                onAddSubtask={onAddSubtask} 
-                                onDeleteSubtask={(subtaskName) => onDeleteSubtask(task.name, subtaskName)} // Handle subtask deletion
+                                onDeleteSubtask={onDeleteSubtask} // Handle subtask deletion
+                                onCompleteSubtask={onCompleteTask} // Handle subtask completion
                             />
                         ))}
                     </Box>
                 </Collapse>
             </CardContent>
 
-            <TaskDialog
+            <SubTaskDialog
                 open={isSubtaskDialogOpen}
                 handleClose={() => setIsSubtaskDialogOpen(false)}
-                handleSave={handleSubtaskSave}
+                parentID={task.id}
+                
             />
 
             <DeleteConfirmationDialog 
