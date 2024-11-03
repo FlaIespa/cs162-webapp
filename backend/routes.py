@@ -23,6 +23,7 @@ def get_task_with_subtasks(task):
         "status": task.status,
         "completed": task.completed,
         "collapsed": task.collapsed,
+        "parent_id": task.parent_id,
         "subitems": [get_task_with_subtasks(sub) for sub in task.subitems]
     }
 
@@ -83,7 +84,8 @@ def get_tasks(list_id):
             "name": task.name,
             "description": task.description,
             "due_date": task.due_date,
-            "completed": task.completed
+            "completed": task.completed,
+            "parent_id": task.parent_id
         } for task in tasks
     ]
 

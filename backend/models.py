@@ -47,6 +47,7 @@ class Task(db.Model):
                 "status": task.status,
                 "completed": task.completed,
                 "collapsed": task.collapsed,
+                "parent_id": task.parent_id,
                 "subitems": [fetch_subtasks(sub) for sub in task.subitems]
             }
         

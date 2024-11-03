@@ -209,7 +209,8 @@ const HomePage = () => {
                                 }
                                 listName={selectedListName}
                                 listId={showTodoList}
-                                onAddTask={handleAddTask}  // Pass handleAddTask as a prop to TodoList
+                                onAddTask={handleAddTask}
+                                 // Pass handleAddTask as a prop to TodoList
                                 // fetchUpdatedTasks={fetchUpdatedTasks}
                             />
                         </Box>

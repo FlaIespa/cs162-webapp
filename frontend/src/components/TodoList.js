@@ -110,6 +110,7 @@ const TodoList = ({ tasks: initialTasks, listName, listId, onAddTask}) => {
                 setSnackbarMessage('Task deleted successfully!');
                 setSnackbarSeverity('info');
                 setSnackbarOpen(true);
+
             } else {
                 const data = await response.json();
                 console.error("Failed to delete task:", data.msg);
@@ -323,7 +324,6 @@ const TodoList = ({ tasks: initialTasks, listName, listId, onAddTask}) => {
                                                         <TodoItem 
                                                             task={task} 
                                                             onDelete={handleDeleteTask} 
-                                                            // onAddSubtask={handleAddSubtask} 
                                                             onDeleteSubtask={handleDeleteSubtask} 
                                                             onCompleteSubtask={handleCompleteSubtask} 
                                                         />
