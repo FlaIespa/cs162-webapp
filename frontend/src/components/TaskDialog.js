@@ -1,8 +1,7 @@
-// src/components/TaskDialog.js
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, MenuItem } from '@mui/material';
 import DueDatePicker from './DueDatePicker';
-import '../App.css'; // Import global styles
+import '../App.css'; 
 
 const TaskDialog = ({ open, handleClose, handleSave, initialData = {} }) => {
     const [taskName, setTaskName] = useState(initialData.name || '');
@@ -23,7 +22,7 @@ const TaskDialog = ({ open, handleClose, handleSave, initialData = {} }) => {
 
     const handleSubmit = () => {
         handleSave({ name: taskName, dueDate, priority });
-        setTaskName(''); // Reset fields
+        setTaskName(''); 
         setDueDate(null);
         setPriority('');
         handleClose();

@@ -1,4 +1,3 @@
-# app.py
 from flask import Flask
 from flask_jwt_extended import JWTManager
 from flask_cors import CORS
@@ -22,9 +21,9 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:3000", "methods": ["GE
 
 # Register blueprints for routes (auth and tasks)
 app.register_blueprint(auth_bp, url_prefix='/auth')
-app.register_blueprint(task_bp, url_prefix='/api')  # Setting a prefix for task routes
+app.register_blueprint(task_bp, url_prefix='/api')  
 
 if __name__ == "__main__":
     with app.app_context():
-        db.create_all()  # Create tables
+        db.create_all()  
     app.run(debug=True, port=5001) 

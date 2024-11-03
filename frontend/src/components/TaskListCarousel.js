@@ -1,4 +1,3 @@
-// src/components/TaskListCarousel.js
 import React from 'react';
 import TaskListCard from './TaskListCard';
 import { Box } from '@mui/material';
@@ -9,7 +8,7 @@ const TaskListCarousel = ({ taskLists, onCardClick, onDelete }) => {
             sx={{
                 display: 'flex',
                 overflowX: 'auto',
-                gap: '1.0rem',           // Adjust gap to manage spacing between cards
+                gap: '1.0rem',           
                 padding: '1rem',
                 alignItems: 'center',
                 '&::-webkit-scrollbar': {
@@ -28,7 +27,7 @@ const TaskListCarousel = ({ taskLists, onCardClick, onDelete }) => {
                         minWidth: '250px',
                         maxWidth: '350px',
                         flexShrink: 0,
-                        display: 'flex', // Ensure consistent spacing without overlap
+                        display: 'flex', 
                     }}
                 >
                     <TaskListCard 

@@ -5,7 +5,7 @@ BASE_URL = "http://127.0.0.1:5000"
 def test_signup(email, password):
     response = requests.post(f"{BASE_URL}/auth/signup", json={"email": email, "password": password})
     print("Status Code:", response.status_code)
-    print("Raw Response:", response.text)  # Print the raw text of the response
+    print("Raw Response:", response.text) 
     try:
         response_data = response.json()
         if response.status_code == 201:
@@ -43,7 +43,7 @@ def test_create_task(token, list_id, task_name, due_date=None, priority=None, st
     headers = {"Authorization": f"Bearer {token}"}
     payload = {
         "name": task_name,
-        "dueDate": due_date,  # Ensure this matches the backend's expected format (e.g., 'YYYY-MM-DDTHH:mm:ss')
+        "dueDate": due_date, 
         "priority": priority,
         "status": status
     }
@@ -68,8 +68,8 @@ test_signup(email, password)
 token = test_login(email, password)
 if token:
     test_protected_route(token)
-    list_id = 2  # Replace with an actual list ID you have access to
+    list_id = 2 
     task_name = "Sample Task"
-    due_date = "2024-11-02T10:00:00"  # Adjust date and time as needed
+    due_date = "2024-11-02T10:00:00" 
     priority = "high"
     test_create_task(token, list_id, task_name, due_date, priority)

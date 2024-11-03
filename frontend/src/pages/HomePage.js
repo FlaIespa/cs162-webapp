@@ -17,7 +17,6 @@ const HomePage = () => {
     const [selectedListName, setSelectedListName] = useState('');
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-    // Load saved showTodoList and selectedListName from local storage on component mount
     useEffect(() => {
         const savedListId = localStorage.getItem('showTodoList');
         if (savedListId) {
@@ -27,7 +26,6 @@ const HomePage = () => {
         }
     }, []);
 
-    // Fetch task lists on component mount
     useEffect(() => {
         const fetchTaskLists = async () => {
             try {
@@ -38,7 +36,7 @@ const HomePage = () => {
                 });
                 const data = await response.json();
                 if (response.ok) {
-                    setTaskLists(data.lists); // `data.lists` now includes tasks with nested subtasks
+                    setTaskLists(data.lists); 
                 } else {
                     console.error(data.msg);
                 }
@@ -50,7 +48,6 @@ const HomePage = () => {
         fetchTaskLists();
     }, []);
 
-    // Function to add a new task list
     const handleAddTaskList = async (newList) => {
         try {
             const response = await fetch(`${API_URL}/api/lists`, {
@@ -77,7 +74,6 @@ const HomePage = () => {
         }
     };
 
-    // Function to add a new task to a specific list
     const handleAddTask = async (listId, taskName, dueDate, priority) => {
         try {
             console.log('This is the due date:', dueDate)
@@ -92,11 +88,10 @@ const HomePage = () => {
             return response;
         } catch (error) {
             console.error("Failed to add task:", error);
-            return null; // Return null if there is an error
+            return null; 
         }
     };
     
-    // Function to delete a task list
     const deleteTaskList = async (id) => {
         try {
             const response = await fetch(`${API_URL}/api/lists/${id}`, {
@@ -125,8 +120,8 @@ const HomePage = () => {
     const handleListClick = (id, name) => {
         setShowTodoList(id);
         setSelectedListName(name);
-        localStorage.setItem('showTodoList', id);  // Save list ID
-        localStorage.setItem('selectedListName', name);  // Save list name
+        localStorage.setItem('showTodoList', id);  
+        localStorage.setItem('selectedListName', name);  
     };
 
 

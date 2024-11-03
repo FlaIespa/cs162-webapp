@@ -64,8 +64,8 @@ const WelcomePage = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                     width: '90%',
-                    maxWidth: '600px',  // Increased max width
-                    padding: '60px',  // Increased padding for a larger look
+                    maxWidth: '600px',  
+                    padding: '60px',  
                     borderRadius: '25px',
                     background: 'rgba(255, 255, 255, 0.8)',
                     backdropFilter: 'blur(15px)',
@@ -97,7 +97,7 @@ const WelcomePage = () => {
                     loop
                     src={hiveAnimation}
                     style={{
-                        width: 220,  // Slightly larger animation
+                        width: 220, 
                         height: 220,
                         marginBottom: 30,
                         transition: 'transform 0.5s ease-in-out',
@@ -116,7 +116,7 @@ const WelcomePage = () => {
                             backgroundColor: 'rgba(0, 150, 136, 0.7)',
                             color: '#fff',
                             fontSize: '1.2rem',
-                            padding: '14px 32px',  // Increased button padding
+                            padding: '14px 32px', 
                             borderRadius: '12px',
                             fontWeight: 'bold',
                             boxShadow: '0px 4px 15px rgba(0, 128, 128, 0.3)',
@@ -136,7 +136,7 @@ const WelcomePage = () => {
                             color: 'var(--accent-color)',
                             borderColor: 'var(--accent-color)',
                             fontSize: '1.2rem',
-                            padding: '14px 32px',  // Increased button padding
+                            padding: '14px 32px', 
                             borderRadius: '12px',
                             fontWeight: 'bold',
                             background: 'rgba(255, 255, 255, 0.2)',

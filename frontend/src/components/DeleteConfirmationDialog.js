@@ -1,4 +1,3 @@
-// src/components/DeleteConfirmationDialog.js
 import React from 'react';
 import { Dialog, DialogTitle, DialogActions, Button } from '@mui/material';
 

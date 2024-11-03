@@ -43,7 +43,7 @@ const SubItem = ({ subTask, level, onAddSubtask, onDeleteSubtask, onCompleteSubt
             priority: newSubtask.priority,
             status: newSubtask.status || 'To-Do'
         });
-        
+
         try {
             const response = await fetch(`${process.env.REACT_APP_API_URL}/api/tasks/${subTask.id}/subtasks`, {
                 method: 'POST',
@@ -52,15 +52,14 @@ const SubItem = ({ subTask, level, onAddSubtask, onDeleteSubtask, onCompleteSubt
                     name: newSubtask.name,
                     dueDate: newSubtask.dueDate,
                     priority: newSubtask.priority,
-                    // parent_id: subTask.id 
                 }),
             });
     
             if (response.ok) {
                 const { subTask } = await response.json();
-                setSubItems((prevSubItems) => [...prevSubItems, subTask]);  // Append new subtask without overwriting
-                onAddSubtask(subTask.id, subTask); // Update parent task with the new subtask
-                setIsSubtaskDialogOpen(false); // Close dialog after save
+                setSubItems((prevSubItems) => [...prevSubItems, subTask]);  
+                onAddSubtask(subTask.id, subTask); 
+                setIsSubtaskDialogOpen(false); 
             } else {
                 console.error("Failed to save subtask");
             }

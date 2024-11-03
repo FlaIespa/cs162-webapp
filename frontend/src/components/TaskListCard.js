@@ -1,4 +1,3 @@
-// src/components/TaskListCard.js
 import React from 'react';
 import { Card, CardContent, Typography, IconButton, Box } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -42,7 +41,7 @@ const TaskListCard = ({ listName, icon, onClick, onDelete, description }) => {
                 aria-label="delete"
                 size="small"
                 onClick={(e) => {
-                    e.stopPropagation(); // Prevent click from opening list
+                    e.stopPropagation(); 
                     onDelete();
                 }}
                 sx={{

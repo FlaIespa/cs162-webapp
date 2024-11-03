@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TaskStatusToggle from './TaskStatusToggle';
 import DeleteConfirmationDialog from './DeleteConfirmationDialog';
-import TaskDialog from './TaskDialog';
 import { Accordion, AccordionSummary, AccordionDetails, Typography, IconButton, Box, Divider } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -9,26 +8,23 @@ import AddIcon from '@mui/icons-material/Add';
 import SubTaskDialog from './SubTaskDialog';
 
 const TodoItem = ({ task, onDelete, onDeleteSubtask, onCompleteTask }) => {
-    const [subitems, setSubitems] = useState(task.subitems || []); // Initialize local state with task.subitems
+    const [subitems, setSubitems] = useState(task.subitems || []); 
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [isSubtaskDialogOpen, setIsSubtaskDialogOpen] = useState(false);
-    const [currentParentId, setCurrentParentId] = useState(null); // State to track parent_id dynamically
+    const [currentParentId, setCurrentParentId] = useState(null);
 
     useEffect(() => {
-        setSubitems(task.subitems || []); // Sync local state with task.subitems when task changes
+        setSubitems(task.subitems || []); 
     }, [task]);
 
-    // Helper function to deeply add a new subtask at the correct level based on parent_id
     const addSubtaskToParent = (parentId, newSubtask, items) => {
         return items.map((item) => {
             if (item.id === parentId) {
-                // If the item matches the parentId, add newSubtask to its subitems
                 return {
                     ...item,
                     subitems: [...(item.subitems || []), newSubtask],
                 };
             } else if (item.subitems) {
-                // Otherwise, recursively check its subitems
                 return {
                     ...item,
                     subitems: addSubtaskToParent(parentId, newSubtask, item.subitems),
@@ -56,14 +52,14 @@ const TodoItem = ({ task, onDelete, onDeleteSubtask, onCompleteTask }) => {
             sx={{ 
                 marginY: 1,
                 padding: 1,
-                borderRadius: '12px', // Rounded corners for a modern look
-                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', // Soft shadow for a modern feel
-                backgroundColor: 'var(--bg-color)', // Background color for the accordion
+                borderRadius: '12px', 
+                boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)', 
+                backgroundColor: 'var(--bg-color)', 
                 transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
-                '&:before': { display: 'none' }, // Remove default MUI Accordion border
+                '&:before': { display: 'none' }, 
                 '&:hover': {
-                    boxShadow: '0px 6px 14px rgba(0, 0, 0, 0.15)', // Enhanced shadow on hover
-                    backgroundColor: 'var(--hover-bg-color)', // Change background color on hover
+                    boxShadow: '0px 6px 14px rgba(0, 0, 0, 0.15)',
+                    backgroundColor: 'var(--hover-bg-color)', 
                 },
             }}
         >
@@ -73,10 +69,10 @@ const TodoItem = ({ task, onDelete, onDeleteSubtask, onCompleteTask }) => {
                     display: 'flex', 
                     alignItems: 'center', 
                     justifyContent: 'space-between',
-                    padding: '0 16px', // More padding for better spacing
-                    borderRadius: '12px', // Ensuring corners are rounded even when collapsed
+                    padding: '0 16px', 
+                    borderRadius: '12px', 
                     '& .MuiAccordionSummary-content': {
-                        margin: '8px 0', // Adjust vertical spacing
+                        margin: '8px 0', 
                     },
                 }}
             >

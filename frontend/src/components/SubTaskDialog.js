@@ -1,8 +1,7 @@
-// src/components/SubTaskDialog.js
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, MenuItem } from '@mui/material';
 import DueDatePicker from './DueDatePicker';
-import '../App.css'; // Import global styles
+import '../App.css'; 
 
 const SubTaskDialog = ({ open, handleClose, handleSave, initialData = {}, parentID }) => {
     const [subTaskName, setSubTaskName] = useState(initialData.name || '');
@@ -29,7 +28,7 @@ const SubTaskDialog = ({ open, handleClose, handleSave, initialData = {}, parent
                 name: subTaskName,
                 dueDate,
                 priority,
-                status: 'To-Do' // Default status
+                status: 'To-Do' 
             });
     
             // Make the API call to create a subtask
@@ -56,7 +55,6 @@ const SubTaskDialog = ({ open, handleClose, handleSave, initialData = {}, parent
                 setDueDate(null);
                 setPriority('');
     
-                // Optional: You can pass the new subtask back to the parent to update the UI
                 handleSave(savedSubtask);
             } else {
                 console.error("Failed to save subtask:", await response.json());

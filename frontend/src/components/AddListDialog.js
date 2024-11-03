@@ -1,4 +1,3 @@
-// src/components/AddListDialog.js
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button, Select, MenuItem, Box, Typography } from '@mui/material';
 import {
@@ -57,11 +56,11 @@ const iconOptions = [
 
 const AddListDialog = ({ open, onClose, onSave }) => {
     const [listName, setListName] = useState('');
-    const [selectedIcon, setSelectedIcon] = useState(iconOptions[0].icon); // Default icon
+    const [selectedIcon, setSelectedIcon] = useState(iconOptions[0].icon); 
 
     const handleSave = () => {
         onSave({ name: listName, icon: selectedIcon });
-        setListName(''); // Reset fields after saving
+        setListName(''); 
         setSelectedIcon(iconOptions[0].icon);
         onClose();
     };

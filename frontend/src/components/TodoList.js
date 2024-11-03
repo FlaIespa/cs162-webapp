@@ -40,18 +40,16 @@ const TodoList = ({ tasks: initialTasks, listName, listId, onAddTask}) => {
                 }
             });
     
-            // Check if the response was successful
             if (!response.ok) {
                 console.error("Failed to fetch tasks or no response received.");
-                return null;  // Handle as needed, e.g., showing an error message
+                return null;  
             }
     
-            // Parse and return the JSON data
             const data = await response.json();
-            return data.tasks;  // Assuming the backend response is structured as `{ tasks: [...] }`
+            return data.tasks; 
         } catch (error) {
             console.error("Failed to fetch tasks:", error);
-            return null; // Handle errors as needed
+            return null; 
         }
     };
 
@@ -59,18 +57,6 @@ const TodoList = ({ tasks: initialTasks, listName, listId, onAddTask}) => {
     const handleSaveTask = async (newTask) => {
         try {
             const response = await onAddTask(listId, newTask.name, newTask.dueDate, newTask.priority);
-    
-            // if (response.status === 201) {
-            //     const updatedTasks = await fetchTasks(listId);
-            //     console.log(updatedTasks)
-            // if (updatedTasks) {
-            //     setTasks(updatedTasks);
-            //     setSnackbarMessage('Task added successfully!');
-            //     setSnackbarSeverity('success');
-            //     setSnackbarOpen(true);
-            //     handleCloseDialog();
-                
-            // }
             setTasks(prevTasks => [...prevTasks, newTask]);
             setSnackbarMessage('Task added successfully!');
             setSnackbarSeverity('success');
@@ -88,7 +74,7 @@ const TodoList = ({ tasks: initialTasks, listName, listId, onAddTask}) => {
 
     
     useEffect(() => {
-    }, [tasks]);  // Dependency on tasks, so this effect will run each time tasks is updated
+    }, [tasks]);  
     
 
     const handleSearch = (query) => {
@@ -182,10 +168,10 @@ const TodoList = ({ tasks: initialTasks, listName, listId, onAddTask}) => {
     };
 
     const tasksWithStatus = tasks
-    .filter((task) => task !== undefined) // Filter out any undefined tasks
+    .filter((task) => task !== undefined) 
     .map((task) => ({
         ...task,
-        status: task.status ?? 'To-Do'// Default status to 'To-Do' if undefined
+        status: task.status ?? 'To-Do'
     }));
 
     const tasksByStatus = {
@@ -231,34 +217,20 @@ const TodoList = ({ tasks: initialTasks, listName, listId, onAddTask}) => {
         const sourceStatus = source.droppableId;
         const destinationStatus = destination.droppableId;
 
-        // Ensure the task was moved to a new location or column
         if (sourceStatus !== destinationStatus || source.index !== destination.index) {
-            // Locate the task being moved by its ID
             const taskToMove = tasks.find((task) => task.id === parseInt(result.draggableId));
 
             if (taskToMove) {
-                // Temporarily update the task's status for optimistic UI update
                 const updatedTask = { ...taskToMove, status: destinationStatus };
                 const reorderedTasks = tasks.map((task) =>
                     task.id === updatedTask.id ? updatedTask : task
                 );
                 setTasks(reorderedTasks);
 
-                // Update the status in the backend
                 const success = await updateTaskStatus(updatedTask.id, destinationStatus);
                 
                 if (!success) {
-                    // Revert if backend update failed
                     setTasks(tasks);
-                
-                // } else {
-                //     await 
-                //     // Confirm the status update from the backend
-                //     setTasks(prevTasks =>
-                //         prevTasks.map((task) =>
-                //             task.id === updatedTask.id ? { ...task, status: destinationStatus } : task
-                //         )
-                //     );
             }
         }
     }
@@ -343,7 +315,7 @@ const TodoList = ({ tasks: initialTasks, listName, listId, onAddTask}) => {
             <TaskDialog
                 open={isDialogOpen}
                 handleClose={handleCloseDialog}
-                handleSave={handleSaveTask} // Save task with backend integration
+                handleSave={handleSaveTask} 
             />
 
             <Snackbar 

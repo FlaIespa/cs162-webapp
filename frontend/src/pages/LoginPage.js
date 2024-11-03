@@ -1,4 +1,3 @@
-// src/pages/LoginPage.js
 import React, { useState } from 'react';
 import { Box, TextField, Typography, Button, Link } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +21,7 @@ const LoginPage = () => {
                 const data = await response.json();
                 localStorage.setItem('token', data.access_token);
                 setError('');
-                navigate('/home'); // Redirect to /home after successful login
+                navigate('/home'); 
             } else {
                 const data = await response.json();
                 setError(data.msg || 'Invalid email or password');

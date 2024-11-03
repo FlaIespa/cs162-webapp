@@ -1,8 +1,7 @@
-// src/components/Header.js
 import React from 'react';
 import { Box, Typography, IconButton } from '@mui/material';
 import HiveIcon from '@mui/icons-material/Hive';
-import '../App.css'; // Ensure global styles are imported here
+import '../App.css'; 
 
 const Header = () => {
     return (
@@ -13,7 +12,7 @@ const Header = () => {
                 alignItems: 'center', 
                 justifyContent: 'space-between',
                 padding: '1rem 2rem', 
-                background: 'linear-gradient(135deg, #00bfa5, #009688)', // Apply gradient
+                background: 'linear-gradient(135deg, #00bfa5, #009688)',
                 color: '#ffffff',
                 boxShadow: '0px 4px 8px rgba(0, 0, 0, 0.1)'
             }}
@@ -30,14 +29,12 @@ const Header = () => {
                         fontWeight: 'bold', 
                         color: '#ffffff',
                         marginLeft: '0.5rem',
-                        letterSpacing: '1px' // Added letter spacing for style
+                        letterSpacing: '1px' 
                     }}
                 >
                     TaskHive
                 </Typography>
-            </Box>
-            
-            {/* Optional: Add additional icons or menu items on the right side if needed */}
+            </Box>            
         </Box>
     );
 };

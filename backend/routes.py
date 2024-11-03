@@ -1,4 +1,3 @@
-# routes.py
 import logging
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
@@ -8,8 +7,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
 from models import Task
 
-
-# auth_bp = Blueprint('auth', __name__)
 task_bp = Blueprint('tasks', __name__)
 logger = logging.getLogger(__name__)
 
@@ -44,7 +41,6 @@ def get_lists():
         {
             "id": lst.id,
             "name": lst.name,
-            # Only fetch tasks associated with this specific list
             "tasks": [task.get_nested_subtasks() for task in Task.query.filter_by(list_id=lst.id).all()]
         }
         for lst in lists
@@ -112,7 +108,6 @@ def delete_list(list_id):
     return jsonify({"msg": "List and associated tasks deleted"}), 200
 
 
-#Route for editing a task name 
 
 # Route for adding a new task to a list
 @task_bp.route('/lists/<int:list_id>/tasks', methods=['POST'])
@@ -176,7 +171,7 @@ def create_subtask(task_id):
         priority=priority,
         status=status,
         list_id=parent_task.list_id,
-        parent_id=task_id  # Associate subtask to the parent task
+        parent_id=task_id  
     )
 
     try:
