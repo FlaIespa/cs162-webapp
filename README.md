@@ -78,16 +78,9 @@ To run the application locally, you will need to set up both the frontend and ba
    JWT_SECRET_KEY=your_jwt_secret_key
    ```
 
-6. **Initialize the database**:
+6. **Start the Flask server**:
    ```bash
-   flask db init
-   flask db migrate
-   flask db upgrade
-   ```
-
-7. **Start the Flask server**:
-   ```bash
-   flask run
+   python app.py
    ```
    The backend will run at [http://localhost:5000](http://localhost:5000).
 
