@@ -1,6 +1,8 @@
 # cs162-webapp
 # Task Management Application
 
+Here is the link to my Loom Video: https://www.loom.com/share/bd66381130204c6f8e5a54fabf749a37?sid=e994dbb8-42f7-458d-bea5-498435c7263b
+
 This repository contains a full-stack task management application that allows users to create, organize, and manage tasks across multiple lists. Users can create nested subtasks, mark tasks as complete, and organize them within lists.
 
 ## Table of Contents
