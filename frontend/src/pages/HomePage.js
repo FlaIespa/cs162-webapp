@@ -17,6 +17,16 @@ const HomePage = () => {
     const [selectedListName, setSelectedListName] = useState('');
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+    // Load saved showTodoList and selectedListName from local storage on component mount
+    useEffect(() => {
+        const savedListId = localStorage.getItem('showTodoList');
+        if (savedListId) {
+            setShowTodoList(Number(savedListId));
+            const savedListName = localStorage.getItem('selectedListName');
+            if (savedListName) setSelectedListName(savedListName);
+        }
+    }, []);
+
     // Fetch task lists on component mount
     useEffect(() => {
         const fetchTaskLists = async () => {
@@ -97,7 +107,12 @@ const HomePage = () => {
             });
             if (response.ok) {
                 setTaskLists(taskLists.filter((list) => list.id !== id));
-                if (showTodoList === id) setShowTodoList(null);
+                if (showTodoList === id) {
+                    setShowTodoList(null);
+                    setSelectedListName('');
+                    localStorage.removeItem('showTodoList');
+                    localStorage.removeItem('selectedListName');
+                }
             } else {
                 const data = await response.json();
                 console.error(data.msg);
@@ -107,10 +122,11 @@ const HomePage = () => {
         }
     };
 
-    const handleListClick = async (id, name) => {
+    const handleListClick = (id, name) => {
         setShowTodoList(id);
         setSelectedListName(name);
-        // await fetchUpdatedTasks(id);
+        localStorage.setItem('showTodoList', id);  // Save list ID
+        localStorage.setItem('selectedListName', name);  // Save list name
     };
 
 
@@ -125,55 +141,6 @@ const HomePage = () => {
             list.id === sourceListId ? sourceList : list.id === destinationListId ? destinationList : list
         ));
     };
-
-    // const fetchUpdatedTasks = async () => {
-    //     try {
-    //         const response = await fetch(`${API_URL}/api/lists`, {
-    //             headers: {
-    //                 'Authorization': `Bearer ${localStorage.getItem('token')}`
-    //             }
-    //         });
-    
-    //         if (!response.ok) {
-    //             console.error(`Failed to fetch lists. Status code: ${response.status}`);
-    //             return;
-    //         }
-    
-    //         const data = await response.json();
-    //         console.log("Fetched data:", data); // Check the structure of the data here
-    
-    //         // Assuming data.lists is the array of lists returned by the backend
-    //         setTaskLists(data.lists);
-    //     } catch (error) {
-    //         console.error("Error fetching updated tasks:", error);
-    //     }
-    // };
-    
-    // const fetchUpdatedTasks = async (listId) => {
-    //     try {
-    //         const response = await fetch(`${API_URL}/api/${listId}/tasks`, {
-    //             method: 'GET',
-    //             headers: {
-    //                 'Authorization': `Bearer ${localStorage.getItem('token')}`
-    //             }
-    //         });
-    //         const data = await response.json();
-    //         console.log("Fetched data:", data); // Check the structure of the data here
-    //         if (response.ok) {
-    //             setTaskLists((prevLists) => {
-    //                 const updatedLists = prevLists.map((list) =>
-    //                     list.id === listId ? { ...list, tasks: data.tasks } : list
-    //                 );
-    //                 console.log("Updated task lists:", updatedLists); // Inspect if the update is correct
-    //                 return updatedLists;
-    //             });
-    //         } else {
-    //             console.error("Failed to fetch updated tasks:", data.msg);
-    //         }
-    //     } catch (error) {
-    //         console.error("Error fetching updated tasks:", error);
-    //     }
-    // };
 
     return (
         <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -193,10 +160,9 @@ const HomePage = () => {
                     const destinationListId = taskLists.find((list) => list.id === destination.droppableId)?.id;
                     if (sourceListId && destinationListId) {
                         handleMoveTask(sourceListId, destinationListId, source.index, destination.index);
-                        // fetchUpdatedTasks(showTodoList);
                     }
                 }}>
-                    {showTodoList && (
+                    {showTodoList && taskLists.some((list) => list.id === showTodoList) &&(
                         <Box sx={{ marginTop: '3rem' }}>
                             <TodoList
                                 tasks={taskLists.find((list) => list.id === showTodoList).tasks}
@@ -210,8 +176,6 @@ const HomePage = () => {
                                 listName={selectedListName}
                                 listId={showTodoList}
                                 onAddTask={handleAddTask}
-                                 // Pass handleAddTask as a prop to TodoList
-                                // fetchUpdatedTasks={fetchUpdatedTasks}
                             />
                         </Box>
                     )}
